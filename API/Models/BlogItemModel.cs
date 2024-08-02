@@ -7,7 +7,7 @@ namespace API.Models
 {
     public class BlogItemModel
     {
-        public int id { get; set; }
+        public int Id { get; set; }
         public int UserId { get; set; }
 
         public string? PublisherName { get; set; }
@@ -21,7 +21,7 @@ namespace API.Models
         public bool IsDeleted { get; set; }
 
         public BlogItemModel(){
-            
+
         }
         
     }
