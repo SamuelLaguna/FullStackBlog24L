@@ -104,11 +104,21 @@ namespace API.Services
             return  _context.UserInfo;
         }
 
+        public UserModel GetAllUserDataByUsername(string username)
+        {
+            return _context.UserInfo.FirstOrDefault(user => user.Username == username);
+        }
+
         public IActionResult Login(LogInDTO user)
         {
           IActionResult Result = Unauthorized(); 
           if(DoesUserExist(user.UserName))
           {
+
+            UserModel foundUser = GetAllUserDataByUsername(user.UserName);
+            if(VerifyUserPassword(user.Password, foundUser.Hash, foundUser.Salt))
+            {
+                
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("moresuperreallylongkeysuperSecretKey@345"));
             var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
             var tokeOptions = new JwtSecurityToken(
@@ -122,6 +132,7 @@ namespace API.Services
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
 
             Result = Ok(new  { Token = tokenString });
+            }
           }
           return Result;
         }
