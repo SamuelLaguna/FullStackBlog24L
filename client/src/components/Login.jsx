@@ -1,7 +1,9 @@
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import { useState } from 'react'
-
+import { checkToken } from "../Services/DataService";
+import {useNavigate} from 'react-router-dom';
 const Login = () => {
+let navigate = useNavigate();
     const [Username, setUsername] = useState('');
     const [Password, setPassword] = useState('');
 
@@ -48,7 +50,7 @@ const Login = () => {
               Login
             </Button>
             <p className="mt-3">Dont Have a Account?</p>
-            <Button variant="primary" type="submit" onClick={handleSubmit}>
+            <Button variant="primary" type="submit" onClick={() => navigate('/CreateAccount')}>
               Create Account
             </Button>
           </Form>

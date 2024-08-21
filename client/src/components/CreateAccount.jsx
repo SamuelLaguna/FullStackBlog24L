@@ -22,6 +22,7 @@ const CreateAccount = () => {
             test1: Username,
             text2: Password
         }
+        CreateAccount(userData);
         console.log(userData);
         
     }
