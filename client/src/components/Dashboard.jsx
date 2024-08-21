@@ -1,6 +1,7 @@
 import { Button, Container, Modal, Form, Accordion, ListGroup, Col,  } from "react-bootstrap";
-
+import {useNavigate} from 'react-router-dom';
 import { useState } from "react";
+import { checkToken } from "../Services/DataService";
 const Dashboard = ({ isDarkMode }) => {
     const [blogTitle, setBlogTitle] = useState("");
     const [blogImage, setBlogImage] = useState("");
@@ -100,8 +101,21 @@ const Dashboard = ({ isDarkMode }) => {
         setBlogImage(e.target.value);
 
     }
+
+    let navigate = useNavigate();
+    //useEffect is the first thing that fires onload.
+    useEffect(() => {
+      
+    if(!checkToken())
+    {
+      navigate('/Login');
+    }
+    }, [])
+    
+
   return (
     <>
+
       <Container
       data-bs-theme={isDarkMode ? "dark" : "light"}
         className={isDarkMode ? "bg-dark text-light" : "bg-light"}
