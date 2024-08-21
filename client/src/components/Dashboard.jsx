@@ -1,129 +1,4 @@
-// import { useState } from "react";
-// import { Button, Container, Row, Col, Modal, Form } from "react-bootstrap";
-
-// const Dashboard = ({ isDarkMode }) => {
-//     const [blogTitle, setBlogTitle] = useState("");
-//     const [blogImage, setBlogImage] = useState("");
-//     const [blogDescription, setBlogDescription] = useState("");
-//     const [blogCatagory, setBlogCatagory] = useState("");
-//     const [blogTags, setBlogTags] = useState("");
-//     const [edit, setEdit] = useState(false);
-//     // const [item, setItem] = useState(true);
-
-//   const [show, setShow] = useState(false);
-
-//   const handleClose = () => setShow(false);
-//   const handleShow = (e) => {
-//     if(e.target.textContent === "Add Blog Item")
-//         {
-//             setEdit(false);
-//             setBlogTitle("");
-//             setBlogDescription("");
-//             setBlogCatagory("");
-//         }    else {
-//             setEdit(true);
-//             setBlogTitle("My Awsome Title");
-//             setBlogDescription("My Awsome Description");
-//             setBlogCatagory("");
-//         }
-//     console.log(e.target.textContent);
-//   }
-
-    // const handleTitle = (e) => {
-    //     setBlogTitle(e.target.value);
-    // }
-    // const handleTag = (e) => {
-    //     setBlogTags(e.target.value);
-
-    // }
-    // const handleCatagory = (e) => {
-    //     setBlogCatagory(e.target.value);
-
-    // }
-    // const handleDescription = (e) => {
-    //     setBlogDescription(e.target.value);
-
-    // }
-    // const handleImage = (e) => {
-    //     setBlogImage(e.target.value);
-
-    // }
-//   return (
-//     <>
-//       <Container
-//         // className="d-flex align-items-center:justify-content-center p-5"
-//         fluid
-//       >
-//         <Button variant="primary" onClick={handleShow}>
-//           Add Blog Item
-//         </Button>
-
-//         <Modal
-//           data-bs-theme={isDarkMode ? "dark" : "light"}
-//           show={show}
-//           onHide={handleClose}
-//         >
-//           <Modal.Header closeButton>
-//             <Modal.Title>Add Blog Item</Modal.Title>
-//           </Modal.Header>
-//           <Modal.Header closeButton>
-//             <Modal.Title>Edit Blog Item</Modal.Title>
-//           </Modal.Header>
-
-
-//           <Modal.Body>
-//             <Form>
-//               <Form.Group className="mb-3" controlId="Title">
-//                 <Form.Label>Title</Form.Label>
-//                 <Form.Control type="text" placeholder="Enter Title" value={blogTitle} />
-//               </Form.Group>
-//               <Form.Group className="mb-3" controlId="formDescription">
-//                 <Form.Label>Description</Form.Label>
-//                 <Form.Control as="textarea" placeholder="Enter Description" value={blogDescription} />
-//               </Form.Group>
-//               <Form.Group>
-//                 <Form.Select controlId="Catagory" value={blogCategory} onChange={handleCatagory}>
-//                     <option>Select Catagory</option>
-//                     <option value="Food">Food</option>
-//                     <option value="Fitness">Fitness</option>
-//                     <option value="Sports">Sports</option>
-//                     <option value="Tech">Tech</option>
-//                 </Form.Select>
-//               </Form.Group>
-
-//               <Form.Group className="mb-3" controlId="Tags">
-//                 <Form.Label>Tags</Form.Label>
-//                 <Form.Control type="password" placeholder="Enter Tag" value={blogTags}/ >
-//               </Form.Group>
-//                 <Form.Group className="mb-3" controlId="Image">
-//                     <Form.Label>Pick a Image</Form.Label>
-//                     <Form.Control type="file" placeholder="Select an Image from file"  value={blogImage}/>
-//                 </Form.Group>
-              
-//             </Form>
-//           </Modal.Body>
-//           <Modal.Footer>
-//             <Button variant="outline-secondary" onClick={handleClose}>
-//               Cancel
-//             </Button>
-//             <Button variant="outline-primary" onClick={handleClose}>
-//               Save Changes
-//             </Button>
-//             <Button variant="outline-primary" onClick={handleClose}>
-//                 Save and Publish
-//             </Button>
-//           </Modal.Footer>
-//         </Modal>
-//         {/* <Button variant="outline-primary" onClick={handleShow}>Edit Blog Item</Button> */}
-//       </Container>
-//     </>
-//   );
-// };
-
-// export default Dashboard;
-
-
-import { Button, Container, Modal, Form, Accordion, ListGroup } from "react-bootstrap";
+import { Button, Container, Modal, Form, Accordion, ListGroup, Col,  } from "react-bootstrap";
 
 import { useState } from "react";
 const Dashboard = ({ isDarkMode }) => {
@@ -265,7 +140,7 @@ const Dashboard = ({ isDarkMode }) => {
                     <option value="Tech">Tech</option>
                 </Form.Select>
               </Form.Group>
-              <Form.Group className="mb-3" controlId="Tags">
+              <Form.Group className="mb-3" controlId="Tags" >
                 <Form.Label>Tags</Form.Label>
                 <Form.Control type="text" placeholder="Enter Tag" value={blogTags} onChange={handleTags}/>
               </Form.Group>
@@ -294,13 +169,13 @@ const Dashboard = ({ isDarkMode }) => {
         <Accordion.Body>
           {
             blogItems.map(item => 
-                <List.Group key={item.Id}>{item.Title}
+                <ListGroup key={item.Id}>{item.Title}
                 <Col className="d-flex justify-content-end mx-2">
                 <Button variant="outline-danger mx-2" >Delete</Button>
-                <Button variant="outline-info mx-2" ><Edit></Edit></Button>
+                <Button variant="outline-info mx-2" ></Button>
                 <Button variant="outline-primary mx-2" >Published</Button>
                 </Col>
-                </List.Group>
+                </ListGroup>
             )
           }
         </Accordion.Body>
@@ -309,12 +184,12 @@ const Dashboard = ({ isDarkMode }) => {
         <Accordion.Header>Accordion Item #2</Accordion.Header>
         <Accordion.Body>
           {
-            blogItems(item => item.Published &&
+            blogItems.map(item => item.Published &&
                 <ListGroup key={item.Id}>{item.Title}
                
                 <Col className="d-flex justify-content-end mx-2">
                 <Button variant="outline-danger mx-2" >Delete</Button>
-                <Button variant="outline-info mx-2" ><Edit></Edit></Button>
+                <Button variant="outline-info mx-2" ></Button>
                 <Button variant="outline-primary mx-2" >Published</Button>
                 </Col>
                 </ListGroup>
