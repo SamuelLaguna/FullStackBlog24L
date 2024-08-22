@@ -1,5 +1,6 @@
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import { useState } from 'react'
+import {createAccount} from '../Services/DataService'
 
 const CreateAccount = () => {
     const [Username, setUsername] = useState('');
@@ -9,6 +10,7 @@ const CreateAccount = () => {
     //Function to handle our User
     const handleUser = (e) => {
         setUsername(e.target.value)
+        
     }
 
     //Function to handle our Password
@@ -19,10 +21,10 @@ const CreateAccount = () => {
     //Function to handle our Submit
     const handleSubmit = (e) => {
         let userData = {
-            test1: Username,
-            text2: Password
+            username: Username,
+            password: Password
         }
-        CreateAccount(userData);
+        createAccount(userData);
         console.log(userData);
         
     }
@@ -44,7 +46,7 @@ const CreateAccount = () => {
               <Form.Control type="password" placeholder="Password" onChange={handlePassword} />
             </Form.Group>
             
-            <Button variant="primary" type="submit" onClick={handleSubmit}>
+            <Button variant="primary" type="button" onClick={handleSubmit}>
               Submit
             </Button>
           </Form>

@@ -1,5 +1,5 @@
 import React from "react";
-import {Nav,Navbar, NavDropdown, Container} from "react-bootstrap";
+import {Nav,Navbar, NavDropdown, Container, Image} from "react-bootstrap";
 import {FaRegMoon} from "react-icons/fa";
 import {IoSunnyOutline} from "react-icons/io5";
 import Moon from "../assets/moon.jpg";
@@ -41,7 +41,7 @@ const NavBar = ({isDarkMode, toggleDarkMode}) => {
             <Nav.Link as={Link} to={'/Login'}>Login</Nav.Link>
             <Nav.Link>Welcome Sam</Nav.Link>
             <Nav.Link eventKey={2} href="#memes">
-              <image className="profilePic" src={Moon} roundCircle></image>
+              <Image className="profilePic" src={Moon} roundedCircle/>
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>

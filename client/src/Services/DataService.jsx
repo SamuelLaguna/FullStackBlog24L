@@ -32,4 +32,4 @@ const createAccount = async (createduser) => {
 }
 
 
-export {checkToken };
+export {checkToken, createAccount};
