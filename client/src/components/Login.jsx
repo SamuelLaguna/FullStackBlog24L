@@ -1,8 +1,9 @@
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import { useState } from 'react'
-import { checkToken } from "../Services/DataService";
+import { checkToken, GetLoggedInUser } from "../Services/DataService";
 import {useNavigate} from 'react-router-dom';
-const Login = () => {
+import { login } from "../Services/DataService";
+const Login = ({onLogin}) => {
 let navigate = useNavigate();
     const [Username, setUsername] = useState('');
     const [Password, setPassword] = useState('');
@@ -19,13 +20,21 @@ let navigate = useNavigate();
     }
 
     //Function to handle our Submit
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         let userData = {
-            test1: Username,
-            text2: Password
+            username: Username,
+            password: Password
         }
         console.log(userData);
-        
+        onLogin(userData);
+       let token = await login(userData);
+        console.log(token);
+        if(token != null)
+        {
+          localStorage.setItem("Token",token)
+          GetLoggedInUser(Username);
+          navigate('/Dashboard');
+        }
     }
 
   return (
@@ -46,11 +55,11 @@ let navigate = useNavigate();
               <Form.Control type="password" placeholder="Password" onChange={handlePassword} />
             </Form.Group>
             
-            <Button variant="primary" type="submit" onClick={handleSubmit}>
+            <Button variant="primary"  onClick={handleSubmit}>
               Login
             </Button>
             <p className="mt-3">Dont Have a Account?</p>
-            <Button variant="primary" type="submit" onClick={() => navigate('/CreateAccount')}>
+            <Button variant="primary"  onClick={() => navigate('/CreateAccount')}>
               Create Account
             </Button>
           </Form>

@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
 import {Container, Button, Row, Col} from 'react-bootstrap'
-import NavBar from "./components/NavBar";
-import CarouselHero from "./components/CarouselHero"
-import Dashboard from "./components/Dashboard";
-import BlogPage from "./components/BlogPage";
-import CreateAccount from "./components/CreateAccount";
-import Login from "./components/Login";
+import NavBar from "./Components/NavBar";
+import CarouselHero from "./Components/CarouselHero"
+import Dashboard from "./Components/Dashboard"
+import BlogPage from "./Components/BlogPage";
+import CreateAccount from "./Components/CreateAccount";
+import Login from "./Components/Login";
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 
 export const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [user, setUser] = useState(null);
+
+  const handleLogin = (userData) => {
+    setUser(userData);
+  }
 
   useEffect(() => {
     const currentTheme = localStorage.getItem('Theme')
@@ -52,7 +57,7 @@ export const App = () => {
           </Col>
           <Routes>
             <Route path="/" element={<BlogPage/>}/>
-            <Route path="/Login" element={<Login/>}/>
+            <Route path="/Login" element={<Login onLogin={handleLogin}/>}/>
             <Route path="/CreateAccount" element={<CreateAccount/>}/>
             <Route path="/Dashboard" element={<Dashboard isDarkMode={isDarkMode}/> }/>
           </Routes>

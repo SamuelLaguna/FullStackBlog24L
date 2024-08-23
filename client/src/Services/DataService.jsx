@@ -3,7 +3,7 @@
 //helper function to check our token
 const checkToken = () => {
     let result = false;
-    let isData = local.getItem("Token");
+    let isData = localStorage.getItem("Token");
     if(isData && isData != null)
     {
         result = true;
@@ -31,5 +31,27 @@ const createAccount = async (createduser) => {
     
 }
 
+    const login = async (loginUser) => {
+        const result = await fetch('http://localhost:5246/api/User/Login', {
+            method: "POST",
+            headers: {
+                "Content-Type": 'application/json'
+            },
+            body: JSON.stringify(loginUser)
+        })
+        if(!result.ok)
+        {
+            const message = `Yo you have a Error. ${result.status}`
+            throw new Error(message);
+        }
+        let data = await result.json();
+        console.log(data);
+        return data;
+    }
 
-export {checkToken, createAccount};
+    const GetLoggedInUser = async (username) => {
+       let result = await fetch(`'http://localhost:5246/api/User/GetUserByUsername/${username}'`)
+       console.log(result)
+    }
+
+export {checkToken, createAccount, login, GetLoggedInUser};

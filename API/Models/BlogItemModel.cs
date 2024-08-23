@@ -16,7 +16,7 @@ namespace API.Models
         public string? Image { get; set; }
         public string? Description { get; set; }
         public string? Date { get; set; }
-        public string? Catagory { get; set; }
+        public string? Category { get; set; }
 
         public bool IsPublished {get; set;}
         public bool IsDeleted { get; set; }

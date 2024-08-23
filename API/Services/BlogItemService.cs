@@ -40,7 +40,7 @@ namespace API.Services
 
             public IEnumerable<BlogItemModel> GetItemByCategory(string category)
         {
-            return _context.BlogInfo.Where(item => item.Catagory == category);
+            return _context.BlogInfo.Where(item => item.Category == category);
         }
 
         public List<BlogItemModel> GetItemByTag(string Tag)
