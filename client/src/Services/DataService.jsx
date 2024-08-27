@@ -1,5 +1,5 @@
 //This will hold out helper function or method.
-
+let userData = {}
 //helper function to check our token
 const checkToken = () => {
     let result = false;
@@ -50,8 +50,10 @@ const createAccount = async (createduser) => {
     }
 
     const GetLoggedInUser = async (username) => {
-       let result = await fetch(`'http://localhost:5246/api/User/GetUserByUsername/${username}'`)
-       console.log(result)
+       let result = await fetch(`http://localhost:5246/api/User/GetUserByUsername/${username}`)
+       userData = await result.json();
+       console.log(userData);
+       return userData;
     }
 
 export {checkToken, createAccount, login, GetLoggedInUser};

@@ -12,6 +12,8 @@ const Dashboard = ({ isDarkMode }) => {
     const [edit, setEdit] = useState(false);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
+    const [userID, setUserID] = useState(0);
+    const [publisherName, setPublisherName] = useState('');
 
     const [blogItems, setBlogItems] = useState([
         {
@@ -113,6 +115,39 @@ const Dashboard = ({ isDarkMode }) => {
     }
     }, [])
     
+    const handleSaveWithPublish = () => {
+      const published = {
+        Id: 0,
+        UserId: userID,
+        PublisherName: publisherName,
+        Tag: blogTags,
+        Title: blogTitle,
+        Description: blogDescription,
+        Date: new Date(),
+        Category: blogCategory,
+        IsPublished: true,
+        IsDeleted: false
+
+      }
+
+    }
+
+
+      const handleSaveWithUnpublished = () => {
+        const published = {
+          Id: 0,
+          UserId: 0,
+          PublisherName: "",
+          Tag: "",
+          Title: "",
+          Description: "",
+          Date: "",
+          Category: "",
+          IsPublished: true,
+          IsDeleted: false
+  
+        }
+      }
 
   return (
     <>
@@ -169,10 +204,10 @@ const Dashboard = ({ isDarkMode }) => {
             <Button variant="secondary" onClick={handleClose}>
               Cancel
             </Button>
-            <Button variant="primary" onClick={handleClose}>
+            <Button variant="primary" onClick={handleSaveWithUnpublished}>
               {edit ? "Save Changes" : "Save"}
             </Button>
-            <Button variant="primary" onClick={handleClose}>
+            <Button variant="primary" onClick={handleSaveWithPublish}>
             {edit ? "Save Changes" : "Save"} and Publish
             </Button>
           </Modal.Footer>
@@ -204,7 +239,7 @@ const Dashboard = ({ isDarkMode }) => {
                
                 <Col className="d-flex justify-content-end mx-2">
                 <Button variant="outline-danger mx-2" >Delete</Button>
-                <Button variant="outline-info mx-2" ></Button>
+                <Button variant="outline-info mx-2" >Edit</Button>
                 <Button variant="outline-primary mx-2" >Published</Button>
                 </Col>
                 </ListGroup>
@@ -217,6 +252,7 @@ const Dashboard = ({ isDarkMode }) => {
     </>
   );
 };
+
 export default Dashboard;
 
 

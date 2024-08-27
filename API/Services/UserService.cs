@@ -137,9 +137,14 @@ namespace API.Services
           return Result;
         }
 
-        internal UserIdDTO GetUserIdDTOByUsername(string username)
+        public  UserIdDTO GetUserIdDTOByUsername(string username)
         {
-            throw new NotImplementedException();
+            var UserInfo = new UserIdDTO();
+            var foundUser = _context.UserInfo.SingleOrDefault(user => user.Username == username);
+            UserInfo.UserId = foundUser.Id;
+            UserInfo.PublisherName = foundUser.Username;
+
+            return UserInfo;
         }
 
         public UserModel GetUserByUsername(string? username)
