@@ -31,7 +31,7 @@ let navigate = useNavigate();
         console.log(token);
         if(token != null)
         {
-          localStorage.setItem("Token",token)
+          localStorage.setItem("Token",token.token)
           GetLoggedInUser(Username);
           navigate('/Dashboard');
         }

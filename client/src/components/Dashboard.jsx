@@ -1,7 +1,7 @@
 import { Button, Container, Modal, Form, Accordion, ListGroup, Col,  } from "react-bootstrap";
 import { useState, useEffect } from "react";
 
-import { checkToken } from "../Services/DataService";
+import { AddBlogItems, checkToken, getItemsByUserId, GetLoggedInUser, LoggedInData } from "../Services/DataService";
 import {useNavigate} from 'react-router-dom';
 const Dashboard = ({ isDarkMode }) => {
     const [blogTitle, setBlogTitle] = useState("");
@@ -15,58 +15,7 @@ const Dashboard = ({ isDarkMode }) => {
     const [userID, setUserID] = useState(0);
     const [publisherName, setPublisherName] = useState('');
 
-    const [blogItems, setBlogItems] = useState([
-        {
-          Id: 1,
-          Title: "Top Finishing and Crossing Drills",
-          Publisher: "anonymous",
-          Date: "01-13-2022",
-          Text: "Developing finishing and crossing skills is an important aspect of soccer that can greatly constribute to your player.",
-          Image:
-                "./assets/Images/3soccerballs.jpg",
-          Published: true
-        },
-        {
-          Id: 2,
-          Title: "6 Soccer Drills to Work on Defense",
-          Publisher: "anonymous",
-          Date: "01-14-2022",
-          Text: "A strong defense is the backbone of any successful soccer team",
-          Image:
-                "./assets/Images/3soccerballs.jpg",
-          Published: true
-        },
-        {
-          Id: 3,
-          Title: "5 Small Side Games",
-          Publisher: "anonymous",
-          Date: "01-15-2022",
-          Text: "Small-sided games create a fast-paced and intense environment.",
-          Image:
-                "./assets/Images/3soccerballs.jpg",
-          Published: true
-        },
-        {
-          Id: 4,
-          Title: "5 Fun 1 V 1 Youth Soccer Activites",
-          Publisher: "anonymous",
-          Date: "01-15-2022",
-          Text: "One of the best ways to naturally bring out the competitive nature.",
-          Image:
-                "./assets/Images/3soccerballs.jpg",
-          Published: false
-        },
-        {
-          Id: 5,
-          Title: "5 Fun warm up soccer drills",
-          Publisher: "anonymous",
-          Date: "01-15-2022",
-          Text: "One of the challenges for youth soccer coaches is to make sure their players are always excited to come to practice.",
-          Image:
-                "./assets/Images/3soccerballs.jpg",
-          Published: false
-        },
-      ]);
+    const [blogItems, setBlogItems] = useState([]);
     const handleShow = (e) => {setShow(true)
 
 
@@ -78,7 +27,7 @@ const Dashboard = ({ isDarkMode }) => {
             setBlogCategory("")
         }else{
             setEdit(true);
-            SetBlogTitle("awesome title")
+            setBlogTitle("awesome title")
             setBlogDescription("awesome description")
             setBlogCategory("Fitness")
         }
@@ -93,17 +42,21 @@ const Dashboard = ({ isDarkMode }) => {
 
     }
     const handleCatagory = (e) => {
-        setBlogCatagory(e.target.value);
+        setBlogCategory(e.target.value);
 
     }
     const handleDescription = (e) => {
         setBlogDescription(e.target.value);
 
     }
-    const handleImage = (e) => {
-        setBlogImage(e.target.value);
+    // const handleImage = (e) => {
+    //     setBlogImage(e.target.value);
 
-    }
+    // }
+
+    
+
+
 
     let navigate = useNavigate();
     //useEffect is the first thing that fires onload.
@@ -114,11 +67,23 @@ const Dashboard = ({ isDarkMode }) => {
       navigate('/Login');
     }
     }, [])
+
+    const handleImage = async (e) => {
+      let file = e.target.files[0];
+     const reader = new FileReader();
+     reader.onloadend = () => {
+      console.log(reader.result);
+     }
+     reader.readAsDataURL(file);
+
+    }
     
-    const handleSaveWithPublish = () => {
+    const handleSaveWithPublish = async () => {
+      let {publisherName, userId} = LoggedInData();
+      
       const published = {
         Id: 0,
-        UserId: userID,
+        UserId: userId,
         PublisherName: publisherName,
         Tag: blogTags,
         Title: blogTitle,
@@ -129,24 +94,34 @@ const Dashboard = ({ isDarkMode }) => {
         IsDeleted: false
 
       }
-
+      console.log(published)
+      handleClose();
+      let result = await AddBlogItems(published)
+      if(result)
+      {
+        let userBlogItems = await getItemsByUserId(userId)
+        setBlogItems(userBlogItems);
+        console.log(userBlogItems, "This is from our UserBlogItems");
+      }
     }
 
 
       const handleSaveWithUnpublished = () => {
-        const published = {
+        let {publisherName, userId} = LoggedInData();
+        const notPublished = {
           Id: 0,
-          UserId: 0,
-          PublisherName: "",
-          Tag: "",
-          Title: "",
-          Description: "",
-          Date: "",
-          Category: "",
-          IsPublished: true,
+          UserId: userID,
+          PublisherName: publisherName,
+          Tag: blogTags,
+          Title: blogTitle,
+          Description: blogDescription,
+          Date: new Date(),
+          Category: blogCategory,
+          IsPublished: false,
           IsDeleted: false
   
         }
+        console.log(notPublished)
       }
 
   return (
@@ -181,8 +156,9 @@ const Dashboard = ({ isDarkMode }) => {
                 <Form.Label>Description</Form.Label>
                 <Form.Control as={'textarea'} placeholder="Enter Description" value={blogDescription} onChange={handleDescription} />
               </Form.Group>
-              <Form.Group>
-                <Form.Select controlId="Category" value={blogCategory} onChange={handleCatagory}>
+              <Form.Group controlId="Category">
+                <Form.Label  >Category</Form.Label>
+                <Form.Select  value={blogCategory} onChange={handleCatagory}>
                     <option>Select Category</option>
                     <option value="Food">Food</option>
                     <option value="Fitness">Fitness</option>
@@ -196,7 +172,7 @@ const Dashboard = ({ isDarkMode }) => {
               </Form.Group>
               <Form.Group className="mb-3" controlId="Image">
               <Form.Label>Pick an Image</Form.Label>
-              <Form.Control type="file" placeholder="Select an Image from file" value={blogImage} onChange={handleImage}/>
+              <Form.Control type="file" placeholder="Select an Image from file" accept="image/png,image/jpg"  onChange={handleImage}/>
               </Form.Group>
             </Form>
           </Modal.Body>
@@ -218,11 +194,11 @@ const Dashboard = ({ isDarkMode }) => {
         <Accordion.Header>Accordion Item #1</Accordion.Header>
         <Accordion.Body>
           {
-            blogItems.map(item => 
-                <ListGroup key={item.Id}>{item.Title}
+            blogItems.map((item, i) => item.isPublished &&
+            <ListGroup key={i}>{item.title}
                 <Col className="d-flex justify-content-end mx-2">
                 <Button variant="outline-danger mx-2" >Delete</Button>
-                <Button variant="outline-info mx-2" ></Button>
+                <Button variant="outline-info mx-2" >Edit</Button>
                 <Button variant="outline-primary mx-2" >Published</Button>
                 </Col>
                 </ListGroup>
@@ -234,8 +210,8 @@ const Dashboard = ({ isDarkMode }) => {
         <Accordion.Header>Accordion Item #2</Accordion.Header>
         <Accordion.Body>
           {
-            blogItems.map(item => item.Published &&
-                <ListGroup key={item.Id}>{item.Title}
+            blogItems.map((item, i) => item.isPublished &&
+                <ListGroup key={i}>{item.title}
                
                 <Col className="d-flex justify-content-end mx-2">
                 <Button variant="outline-danger mx-2" >Delete</Button>

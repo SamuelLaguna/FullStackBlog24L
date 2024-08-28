@@ -73,7 +73,12 @@ namespace API.Services
              return  _context.SaveChanges() != 0;
         }
 
-        internal IEnumerable<BlogItemModel> GetPublishedItems()
+        public IEnumerable<BlogItemModel> GetItemsByUserId(int userId)
+        {
+            return _context.BlogInfo.Where(item => item.UserId == userId);
+        }
+
+        public IEnumerable<BlogItemModel> GetPublishedItems()
         {
             return _context.BlogInfo.Where(item => item.IsPublished);
         }

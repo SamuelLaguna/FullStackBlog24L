@@ -4,7 +4,7 @@ import {FaRegMoon} from "react-icons/fa";
 import {IoSunnyOutline} from "react-icons/io5";
 import Moon from "../assets/moon.jpg";
 import {Link} from "react-router-dom"
-const NavBar = ({isDarkMode, toggleDarkMode}) => {
+const NavBar = ({isDarkMode, toggleDarkMode, user}) => {
   return (
     <>
     <Navbar collapseOnSelect expand="lg" 
@@ -39,7 +39,7 @@ const NavBar = ({isDarkMode, toggleDarkMode}) => {
             </Nav.Link>
             <Nav.Link as={Link} to={'/CreateAccount'}>CreateAccount</Nav.Link>
             <Nav.Link as={Link} to={'/Login'}>Login</Nav.Link>
-            <Nav.Link>Welcome Sam</Nav.Link>
+            <Nav.Link>Welcome {user ? user.username : "Guest"}</Nav.Link>
             <Nav.Link eventKey={2} href="#memes">
               <Image className="profilePic" src={Moon} roundedCircle/>
             </Nav.Link>
