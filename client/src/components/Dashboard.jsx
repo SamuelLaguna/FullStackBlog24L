@@ -1,9 +1,9 @@
 import { Button, Container, Modal, Form, Accordion, ListGroup, Col,  } from "react-bootstrap";
 import { useState, useEffect } from "react";
-
+import Spinner from 'react-bootstrap/Spinner';
 import { AddBlogItems, checkToken, getItemsByUserId, GetLoggedInUser, LoggedInData } from "../Services/DataService";
 import {useNavigate} from 'react-router-dom';
-const Dashboard = ({ isDarkMode }) => {
+const Dashboard = ({ isDarkMode, onLogin }) => {
     const [blogTitle, setBlogTitle] = useState("");
     const [blogImage, setBlogImage] = useState("");
     const [blogDescription, setBlogDescription] = useState("");
@@ -14,6 +14,7 @@ const Dashboard = ({ isDarkMode }) => {
     const handleClose = () => setShow(false);
     const [userID, setUserID] = useState(0);
     const [publisherName, setPublisherName] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
 
     const [blogItems, setBlogItems] = useState([]);
     const handleShow = (e) => {setShow(true)
@@ -59,6 +60,24 @@ const Dashboard = ({ isDarkMode }) => {
 
 
     let navigate = useNavigate();
+
+    //Load Data
+    const loadUserData = async () => {
+      let userInfo = LoggedInData();
+      onLogin(userInfo);
+      setUserID(userInfo.userId);
+      setPublisherName(userInfo.publisherName);
+      console.log("User Info:", userInfo);
+      setTimeout(async () => {
+        let userBlogItems = await getItemsByUserId(userInfo.userId);
+        setBlogItems(userBlogItems);
+        setIsLoading(false);
+        setBlogItems('');
+      console.log("Loaded blog items:", userBlogItems);
+      },1000)
+      
+    }
+
     //useEffect is the first thing that fires onload.
     useEffect(() => {
       
@@ -66,6 +85,7 @@ const Dashboard = ({ isDarkMode }) => {
     {
       navigate('/Login');
     }
+    loadUserData();
     }, [])
 
     const handleImage = async (e) => {
@@ -73,6 +93,7 @@ const Dashboard = ({ isDarkMode }) => {
      const reader = new FileReader();
      reader.onloadend = () => {
       console.log(reader.result);
+      setBlogImage(reader.result);
      }
      reader.readAsDataURL(file);
 
@@ -106,7 +127,7 @@ const Dashboard = ({ isDarkMode }) => {
     }
 
 
-      const handleSaveWithUnpublished = () => {
+      const handleSaveWithUnpublished = async () => {
         let {publisherName, userId} = LoggedInData();
         const notPublished = {
           Id: 0,
@@ -120,6 +141,15 @@ const Dashboard = ({ isDarkMode }) => {
           IsPublished: false,
           IsDeleted: false
   
+        }
+        console.log(notPublished)
+        handleClose();
+        let result = await AddBlogItems(notPublished)
+        if(result)
+        {
+          let userBlogItems = await getItemsByUserId(userId)
+          setBlogItems(userBlogItems);
+          console.log(userBlogItems, "This is from our UserBlogItems");
         }
         console.log(notPublished)
       }
@@ -188,7 +218,8 @@ const Dashboard = ({ isDarkMode }) => {
             </Button>
           </Modal.Footer>
         </Modal>
-
+        {isLoading ? <><Spinner animation="border" variant="success" /><h2>dot loading....</h2> </> : 
+        blogItems.length == 0 ? <><h2 className="text-center">No blog items found</h2> </> : 
         <Accordion defaultActiveKey={['0', '1']}>
       <Accordion.Item eventKey="0">
         <Accordion.Header>Accordion Item #1</Accordion.Header>
@@ -224,6 +255,8 @@ const Dashboard = ({ isDarkMode }) => {
         </Accordion.Body>
       </Accordion.Item>
     </Accordion>
+    }
+   
       </Container>
     </>
   );

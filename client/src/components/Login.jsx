@@ -1,9 +1,9 @@
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import { useState } from 'react'
-import { checkToken, GetLoggedInUser } from "../Services/DataService";
+import { checkToken, GetLoggedInUser, login} from "../Services/DataService";
 import {useNavigate} from 'react-router-dom';
-import { login } from "../Services/DataService";
-const Login = ({onLogin}) => {
+// import { login } from "../Services/DataService";
+const Login = () => {
 let navigate = useNavigate();
     const [Username, setUsername] = useState('');
     const [Password, setPassword] = useState('');
@@ -26,15 +26,18 @@ let navigate = useNavigate();
             password: Password
         }
         console.log(userData);
-        onLogin(userData);
-       let token = await login(userData);
+        
+        let token = await login(userData);
         console.log(token);
         if(token != null)
-        {
-          localStorage.setItem("Token",token.token)
-          GetLoggedInUser(Username);
+          {
+            localStorage.setItem("Token",token.token);
+            // localStorage.setItem("UserData", JSON.stringify(userData));
+            await GetLoggedInUser(Username);
+            
           navigate('/Dashboard');
         }
+        return userData;
     }
 
   return (

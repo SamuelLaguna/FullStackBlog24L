@@ -11,6 +11,8 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 export const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [user, setUser] = useState(null);
+  const storedUser = JSON.parse(localStorage.getItem("UserData"));
+
 
   const handleLogin = (userData) => {
     setUser(userData);
@@ -32,6 +34,18 @@ export const App = () => {
     
   }, [isDarkMode])
   
+  useEffect(() => {
+    const storedUser = localStorage.getItem("UserData");
+  
+  if(storedUser)
+  {
+    let Userstored = JSON.parse(storedUser);
+    setUser(Userstored);
+  }
+    
+  }, [])
+  
+
   const toggleDarkMode = () => {
     setIsDarkMode(prevMode => !prevMode)
   }
@@ -41,7 +55,7 @@ export const App = () => {
     <>
     <BrowserRouter>
       <Container className="p-0" fluid>
-      <NavBar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} user={user}/>
+      <NavBar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} user={storedUser}/>
       </Container>
       <Container fluid
         className={` ${
@@ -57,9 +71,9 @@ export const App = () => {
           </Col>
           <Routes>
             <Route path="/" element={<BlogPage/>}/>
-            <Route path="/Login" element={<Login onLogin={handleLogin}/>}/>
-            <Route path="/CreateAccount" element={<CreateAccount/>}/>
-            <Route path="/Dashboard" element={<Dashboard isDarkMode={isDarkMode}/> }/>
+            <Route path="/Login" element={<Login />}/>
+            <Route path="/CreateAccount" element={<CreateAccount />}/>
+            <Route path="/Dashboard" element={<Dashboard isDarkMode={isDarkMode} onLogin={handleLogin} /> }/>
           </Routes>
         </Row>
         {/* <Dashboard isDarkMode={isDarkMode}/> */}
