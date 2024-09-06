@@ -66,7 +66,7 @@ export const App = () => {
       
       >
         <CarouselHero  isDarkMode={isDarkMode}/>
-        <Row className="text-center">
+        <Row className="">
           <Col>
           <h1>Our Blog</h1>
           </Col>

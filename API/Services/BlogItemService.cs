@@ -75,12 +75,12 @@ namespace API.Services
 
         public IEnumerable<BlogItemModel> GetItemsByUserId(int userId)
         {
-            return _context.BlogInfo.Where(item => item.UserId == userId);
+            return _context.BlogInfo.Where(item => item.UserId == userId && item.IsDeleted == false);
         }
 
         public IEnumerable<BlogItemModel> GetPublishedItems()
         {
-            return _context.BlogInfo.Where(item => item.IsPublished);
+            return _context.BlogInfo.Where(item => item.IsPublished && item.IsDeleted == false);
         }
     }
 }
