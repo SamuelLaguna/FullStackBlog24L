@@ -12,10 +12,11 @@ export const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [user, setUser] = useState(null);
   const storedUser = JSON.parse(localStorage.getItem("UserData"));
-
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
 
   const handleLogin = (userData) => {
     setUser(userData);
+    setIsLoggedIn(true);//Trigger re-render
   }
 
   useEffect(() => {
@@ -55,7 +56,7 @@ export const App = () => {
     <>
     <BrowserRouter>
       <Container className="p-0" fluid>
-      <NavBar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} user={storedUser}/>
+      <NavBar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} user={storedUser} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
       </Container>
       <Container fluid
         className={` ${
